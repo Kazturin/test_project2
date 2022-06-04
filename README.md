@@ -12,4 +12,5 @@
 6. Миграция БД
     - php artisan migrate;
     - php artisan db:seed
-7. Запустите `php artisan serve`, чтобы запустить проект по адресу http://localhost:8000
+7. php artisan storage:link	
+8. Запустите `php artisan serve`, чтобы запустить проект по адресу http://localhost:8000

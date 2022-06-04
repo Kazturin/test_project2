@@ -27,7 +27,7 @@
                 </select>
                 <div class="my-5">
                 <input type="file" name="poster">
-                <img src="{{asset('/storage/'.$film->poster)}}" width="100px" alt="image">
+                <img src="{{isset($film->poster) ? asset('/storage/'.$film->poster) : '/image/no-photo.png'}}" width="100px" alt="image">
                </div>
             <div class="flex items-start">
                   <div class="flex items-center h-5">

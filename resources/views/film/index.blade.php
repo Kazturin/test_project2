@@ -9,7 +9,7 @@
            @foreach($films as $film)
                <div class="flex flex-col items-center bg-gray-300 rounded-md border-b shadow-md">
             
-               <img src="{{isset($film->poster) ? asset('/storage/'.$film->poster) : asset('/storage/no-photo.png')}}" class="w-full" alt="image">
+               <img src="{{isset($film->poster) ? asset('/storage/'.$film->poster) : '/image/no-photo.png'}}" class="w-full" alt="image">
                
                <div class="p-2 text-center">
                <a href="{{route('films.show',$film->id)}}" class="font-semibold">{{$film->name}}</a>

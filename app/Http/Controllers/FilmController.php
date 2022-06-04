@@ -45,25 +45,15 @@ class FilmController extends Controller
     public function store(FilmRequest $request)
     {
         $data = $request->validated();
+
         if(isset($data['poster'])){
             $data['poster'] = $request->file('poster')->store('uploads','public');
         }
         
-        $film =Film::create([
-           'name' => $data['name'],
-           'is_published' =>$data['is_published'],
-           'poster' => $data['poster']
-       ]);
+        $film =Film::create($data);
 
-        if(isset($data['genres'])){
-             foreach($data['genres'] as $genreId){
-            FilmGenre::create([
-                'film_id' => $film->id,
-                'genre_id' => $genreId
-            ]);
-           }
-        }
-       
+
+        $this->addGenresToFilm($data['genres'],$film->id);
 
         return redirect()->route('films.index');
     }
@@ -108,6 +98,7 @@ class FilmController extends Controller
    
         $data = $request->validated();
 
+        // изменить файл
         if(isset($data['poster'])){
             if(File::exists(public_path('storage/'.$film->poster))){
                 \File::delete(public_path('storage/'.$film->poster));
@@ -115,26 +106,9 @@ class FilmController extends Controller
             $data['poster'] = $request->file('poster')->store('uploads','public');
         }
         
-
-        $oldIds = $film->genres->pluck('id')->toArray();
         $film->update($data);
-        if(isset($data['genres'])){
 
-        $newIds = $data['genres'];
-        $toDelete = array_diff($oldIds,$newIds);
-        $toAdd = array_diff($newIds,$oldIds);
-       
-        foreach($toDelete as $item){
-            FilmGenre::where(['film_id'=>$film->id,'genre_id'=>$item])->delete();
-        }
-        foreach($toAdd as $genreId){
-            FilmGenre::create([
-                'film_id' => $film->id,
-                'genre_id' => $genreId
-            ]);
-        }
-        }
-        
+        $this->updateGenres($film,$data['genres']);
        
         return redirect()->route('films.index');
     }
@@ -150,5 +124,29 @@ class FilmController extends Controller
         $film->delete();
 
         return redirect()->route('films.index');
+    }
+
+    public function updateGenres($film,$genreIds){
+
+        $oldIds = $film->genres->pluck('id')->toArray();
+
+        $toDelete = array_diff($oldIds,$genreIds); // список id жанра который нужно удалить
+        $toAdd = array_diff($genreIds,$oldIds);  // список id жанра который нужно добавить
+       
+        // удаляем не выбранные жанры
+        foreach($toDelete as $item){
+            FilmGenre::where(['film_id'=>$film->id,'genre_id'=>$item])->delete();
+        }
+        // добавляем новые жанры
+        $this->addGenresToFilm($toAdd,$film->id);
+    }
+
+    public function addGenresToFilm($genreIds,$filmId){
+        foreach($genreIds as $genreId){
+            FilmGenre::create([
+                'film_id' => $filmId,
+                'genre_id' => $genreId
+            ]);
+        }
     }
 }

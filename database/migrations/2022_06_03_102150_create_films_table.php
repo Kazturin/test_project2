@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->boolean('is_published');
-            $table->string('poster')->nullable();;
+            $table->string('poster')->nullable();
         });
     }
 

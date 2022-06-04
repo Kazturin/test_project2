@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,16 +12,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-//Route::controller(\App\Http\Controllers\FilmController::class)->group(function () {
-//    Route::get('/', 'index')->name('film.index');
-//    Route::get('film/{id}', 'show')->name('film.show');
-//});
-//Route::controller(\App\Http\Controllers\GenreController::class)->group(function () {
-//    Route::get('/', 'index')->name('genre.index');
-//    Route::get('genre/{id}', 'show')->name('genre.show');
-//});
+Route::get('/', [\App\Http\Controllers\FilmController::class, 'index']);
+
 Route::resource('/genres',\App\Http\Controllers\GenreController::class);
 Route::resource('/films',\App\Http\Controllers\FilmController::class);

@@ -17,7 +17,7 @@ class FilmResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'poster' => asset('/storage/'.isset($this->poster)?$this->poster:'no-photo.png'),
+            'poster' => isset($this->poster) ? asset('/storage/'.$this->poster): asset('/image/no-photo.png'),
             'genres' => $this->genres
         ];
     }

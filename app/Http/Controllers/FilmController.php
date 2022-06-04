@@ -66,7 +66,7 @@ class FilmController extends Controller
      */
     public function show(Film $film)
     {
-        //
+        return view('film.show',['film'=>$film]);
     }
 
     /**
@@ -121,6 +121,9 @@ class FilmController extends Controller
      */
     public function destroy(Film $film)
     {
+        if(File::exists(public_path('storage/'.$film->poster))){
+            \File::delete(public_path('storage/'.$film->poster));
+          }
         $film->delete();
 
         return redirect()->route('films.index');
